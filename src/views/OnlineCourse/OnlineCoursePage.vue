@@ -105,9 +105,31 @@
                   <el-form-item label="教学计划" label-position="top" prop="coursePlan">
                     <el-input v-model="form.coursePlan" placeholder="请输入教学计划" type="textarea"></el-input>
                   </el-form-item>
-                  <!--  -->
-                  <el-form-item>
-
+                  <!-- 上传课程封面 -->
+                  <el-form-item label="上传课程封面">
+                    <el-upload
+                      class="avatar-uploader"
+                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccess"
+                      :before-upload="beforeAvatarUpload"
+                    >
+                      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                    </el-upload>
+                  </el-form-item>
+                  <!-- 上传教学视频 -->
+                  <el-form-item label="上传教学视频">
+                    <el-upload
+                      class="avatar-uploader"
+                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                      :show-file-list="false"
+                      :on-success="handleAvatarSuccess"
+                      :before-upload="beforeAvatarUpload"
+                    >
+                      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                      <el-icon v-else class="avatar-uploader-icon"><VideoCamera /></el-icon>
+                    </el-upload>
                   </el-form-item>
                 </el-form>
               </template>
@@ -134,7 +156,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Search, Microphone, Collection, Plus, School } from '@element-plus/icons-vue'
+import { Search, Microphone, Collection, Plus, School, VideoCamera } from '@element-plus/icons-vue'
 import { getCourseDetailAPI, postTeacherUploadOnlineCourseAPI, postTeacherGetOnlineCourseListAPI } from '@/api/onlineCourse'
 
 // 页面加载的同时，获取网络课程列表，默认为口语
@@ -170,12 +192,12 @@ const handleTabChange = async () => {
 const handleCurrentChange = async (val) => {
   console.log(val)
   // 发起分页请求
-  const res = await postTeacherGetOnlineCourseListAPI({
-    courseCategory: activeTab.value,
-    pageSize: pageSize.value,
-    currentPage: currentPage.value,
-  })
-  console.log(res)
+  // const res = await postTeacherGetOnlineCourseListAPI({
+  //   courseCategory: activeTab.value,
+  //   pageSize: pageSize.value,
+  //   currentPage: currentPage.value,
+  // })
+  // console.log(res)
 }
 
 // 抽屉所需的变量
@@ -222,5 +244,24 @@ const confirmClick = async () => {
 .demo-tabs .custom-tabs-label span {
   vertical-align: middle;
   margin-left: 4px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 150px;
+  height: 150px;
+  text-align: center;
 }
 </style>
