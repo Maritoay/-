@@ -121,10 +121,10 @@
             <el-col :span="10">
               <el-form-item label="毕业院校" label-position="top" prop="graduationSchool">
                 <el-cascader
-                size="large"
-                v-model="form1.graduationSchool"
-                :options="schoolOptions"
-                @change="handleChange"
+                  size="large"
+                  v-model="form1.graduationSchool"
+                  :options="schoolOptions"
+                  @change="handleChange"
                 />
               </el-form-item>
             </el-col>
@@ -317,7 +317,7 @@ const schoolOptions = [
   }
 ]
 const goNext = async () => {
-  // await ruleFormRef1.value.validate()
+  await ruleFormRef1.value.validate()
   activeSteps.value = 2
 }
 

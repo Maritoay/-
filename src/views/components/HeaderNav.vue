@@ -8,17 +8,17 @@ const activeIndex = ref(0)
 // 监视activeIndex变化的函数
 const route = useRoute()
 function getActiveIndex(path) {
-  if (path === '/teacher/home') {
+  if (path === '/home') {
     activeIndex.value = 0
   } else if (path === '/teacher/teachingDocking') {
     activeIndex.value = 1
   } else if (
-    path === '/teacher/onlineCourses' ||
+    path === '/onlineCourse' ||
     path === '/teacher/uploadCourses' ||
     path === '/teacher/courseDetails'
   ) {
     activeIndex.value = 2
-  } else if (path === '/teacher/user') {
+  } else if (path === '/center') {
     activeIndex.value = 3
   }
 }
@@ -71,7 +71,7 @@ const SearchValue = ref('')
 
 <template>
   <div
-    class="HeaderNavContainer px-4 py-2 w-full flex h-24 fixed top-0 left-0 bg-[#dff2ff] items-center justify-between z-50 shadow-md"
+    class="HeaderNavContainer px-4 py-2 min-w-7xl w-full flex h-24 fixed top-0 left-0 bg-[#dff2ff] items-center justify-between z-50 shadow-md"
   >
     <!-- 左侧 -->
     <div class="LeftContainer flex items-center">
@@ -87,7 +87,7 @@ const SearchValue = ref('')
       <!-- 导航部分 -->
       <div class="NavContainer flex items-center">
         <div
-          @click="pageJump('/teacher/home', 0)"
+          @click="pageJump('/home', 0)"
           class="mr-5 px-5 py-3 text-xl 2xl:text-2xl duration-500 hover:ring-2 ring-blue-500/50 cursor-pointer rounded-3xl"
           :class="{ 'bg-sky-200': activeIndex === 0 }"
         >
@@ -101,7 +101,7 @@ const SearchValue = ref('')
           授课对接
         </div>
         <div
-          @click="pageJump('/teacher/onlineCourses', 2)"
+          @click="pageJump('/onlineCourse', 2)"
           class="px-5 py-3 text-xl 2xl:text-2xl duration-500 rounded-3xl hover:ring-2 ring-blue-500/50 cursor-pointer"
           :class="{ 'bg-sky-200': activeIndex === 2 }"
         >
@@ -128,7 +128,7 @@ const SearchValue = ref('')
         </el-select>
       </div>
       <!-- 搜索框 -->
-      <div
+      <!-- <div
         class="SearchContainer mr-5 h-16 bg-white rounded-3xl hidden xl:flex"
       >
         <el-input
@@ -138,14 +138,14 @@ const SearchValue = ref('')
           placeholder="Pick a date"
           :suffix-icon="Search"
         />
-      </div>
+      </div> -->
       <!-- 消息图标 -->
       <div class="MessageContainer mr-5 cursor-pointer">
         <img class="w-10 h-10" src="/src/assets/img/message.png" alt="" />
       </div>
       <!-- 用户栏 -->
       <div
-        @click="pageJump('/teacher/user', 3)"
+        @click="pageJump('/center', 3)"
         class="UserContainer flex items-center hover:ring-2 ring-blue-500/50 rounded-3xl duration-500 px-3 py-2"
         :class="{ 'bg-sky-200': activeIndex === 3 }"
       >
