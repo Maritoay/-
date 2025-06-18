@@ -21,6 +21,8 @@ const router = createRouter({
         {path: '/onlinecourse', component: () => import('@/views/OnlineCourse/OnlineCoursePage.vue')},
         {path: '/coursedetails', component: () => import('@/views/CourseDetails/CourseDetailsPage.vue')},
         {path: '/checkdetails', component: () => import('@/views/CheckDetails/CheckDetailsPage.vue')},
+        {path: '/checkhomework', component: () => import('@/views/CheckHomework/CheckHomeworkPage.vue')},
+        {path: '/entercourse', component: () => import('@/views/EnterCourse/EnterCoursePage.vue')},
       ] 
     }
   ],

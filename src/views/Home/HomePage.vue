@@ -185,10 +185,12 @@
 import { ref } from 'vue'
 import { getTeacherGetTeacherFirstPageAPI } from '@/api/home'
 
+const teacherFirstPageContent = ref({})
 // 获取教师端相关内容
 const getTeacherGetTeacherFirstPage = async () => {
     const res = await getTeacherGetTeacherFirstPageAPI()
     console.log(res)
+    teacherFirstPageContent.value = res.data
 }
 
 getTeacherGetTeacherFirstPage()

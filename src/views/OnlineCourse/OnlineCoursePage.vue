@@ -132,6 +132,51 @@
                     </el-upload>
                   </el-form-item>
                 </el-form>
+                <!-- 设置课后作业 -->
+                <div>
+                  <!-- 标题 -->
+                  <div class="mb-3 text-xl text-[#606266]">
+                    <el-tag type="primary" size="large">设置课后作业</el-tag>
+                    <el-button round style="margin-left: 10px;" size="small">添加作业</el-button>
+                  </div>
+                  <div>
+                    <div class="p-3 border-1 border-slate-200">
+                      <div class="mb-2 flex">
+                        <el-text style="margin-right: 10px;" size="large">选择题型:</el-text>
+                        <el-select style="max-width: 200px;" placeholder="请选择题型">
+                          <el-option
+                          v-for="item in questionCatrgories"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                          
+                          <template #footer>
+                            <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
+                              新增选项
+                            </el-button>
+                            <template v-else>
+                              <el-input
+                                v-model="optionName"
+                                class="option-input"
+                                placeholder="输入选项名称"
+                                size="small"
+                              />
+                              <el-button type="primary" size="small" @click="onConfirm">
+                                确定
+                              </el-button>
+                              <el-button size="small" @click="clear">取消</el-button>
+                            </template>
+                          </template>
+                        </el-select>
+                      </div>
+                      <div class="flex">
+                        <el-text style="margin-right: 10px;" size="large">上传题目:</el-text>
+                        <el-input style="max-width: 480px;" type="textarea" placeholder="请输入题目..."></el-input>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </template>
               <template #footer>
                 <el-button type="danger">取消</el-button>
@@ -203,6 +248,13 @@ const handleCurrentChange = async (val) => {
 // 抽屉所需的变量
 const ruleFormRef = ref(null)
 const isShowDialog = ref(false)
+const optionName = ref('')
+const isAdding = ref(false)
+const questionCatrgories = ref([
+  { label: '单选题', value: '单选题' },
+  { label: '多选题', value: '多选题' },
+  { label: '填空题', value: '填空题' }
+])
 const form = ref({
   courseTitle: '',
   courseCategory: '',
@@ -220,9 +272,25 @@ const uploadCourse = () => {
 }
 const confirmClick = async () => {
   console.log(111)
-  
   await ruleFormRef.value.validate()
 }
+const onConfirm = () => {
+  if (optionName.value) {
+    questionCatrgories.value.push({
+      label: optionName.value,
+      value: optionName.value,
+    })
+    clear()
+  }
+}
+const clear = () => {
+  optionName.value = ''
+  isAdding.value = false
+}
+const onAddOption = () => {
+  isAdding.value = true
+}
+
 </script>
 
 <style lang="less" scope>

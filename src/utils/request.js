@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 
 const request = axios.create({
-  baseURL: 'http://8.134.62.173:7777',
+  baseURL: 'https://8.134.62.173:7777',
   timeout: 10000,
 });
 
