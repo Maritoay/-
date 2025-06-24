@@ -1,10 +1,14 @@
 import axios from 'axios'
+// import https from 'https'
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 
 const request = axios.create({
-  baseURL: 'https://8.134.62.173:7777',
+  // httpsAgent: new https.Agent({
+  //   rejectUnauthorized: false // 忽略自签名证书的错误
+  // }),
+  baseURL: '/api',
   timeout: 10000,
 });
 
@@ -31,4 +35,4 @@ request.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
-export default request;
+export default request

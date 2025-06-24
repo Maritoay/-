@@ -27,4 +27,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://8.134.62.173:7777',
+        changeOrigin: true,
+        secure: false, // 忽略证书错误
+        rewrite: path => path.replace(/^\/api/, ''),
+      }
+    }
+  }
 })

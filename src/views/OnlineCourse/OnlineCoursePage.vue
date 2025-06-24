@@ -57,7 +57,7 @@
                         当你来到一个商场，想尽情购买的时候，应该怎么和售货员对话呢？
                     </el-text>
                     <template #footer>
-                        <el-button type="primary" plain :icon="School">进入学习</el-button>
+                        <el-button @click="goPage" type="primary" plain :icon="School">进入学习</el-button>
                     </template>
                 </el-card>
               </div>
@@ -91,92 +91,60 @@
                 <el-form
                   ref="ruleFormRef"
                   :model="form"
-                  :rules="rules"
                 >
-                  <el-form-item label="课程名称" prop="courseTitle">
+                  <el-form-item label="课程名称" label-position="top">
                     <el-input v-model="form.courseTitle" placeholder="请输入课程名称"></el-input>
                   </el-form-item>
-                  <el-form-item label="课程分类" prop="courseCategory">
+                  <el-form-item label="课程分类" label-position="top">
                     <el-input v-model="form.courseCategory" placeholder="请输入课程分类"></el-input>
                   </el-form-item>
-                  <el-form-item label="课程简介" label-position="top" prop="introduction">
+                  <el-form-item label="课程简介" label-position="top">
                     <el-input v-model="form.introduction" placeholder="请输入课程简介" type="textarea"></el-input>
                   </el-form-item>
-                  <el-form-item label="教学计划" label-position="top" prop="coursePlan">
+                  <el-form-item label="教学计划" label-position="top">
                     <el-input v-model="form.coursePlan" placeholder="请输入教学计划" type="textarea"></el-input>
                   </el-form-item>
                   <!-- 上传课程封面 -->
-                  <el-form-item label="上传课程封面">
-                    <el-upload
-                      class="avatar-uploader"
-                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                      :show-file-list="false"
-                      :on-success="handleAvatarSuccess"
-                      :before-upload="beforeAvatarUpload"
-                    >
-                      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-                    </el-upload>
+                  <el-form-item label="上传课程封面" label-position="top">
+                    <el-button @click="uploadImg">上传课程封面</el-button>
+                    <input ref="imgInput" @change="uploadImgChange" hidden type="file">
                   </el-form-item>
                   <!-- 上传教学视频 -->
-                  <el-form-item label="上传教学视频">
-                    <el-upload
-                      class="avatar-uploader"
-                      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                      :show-file-list="false"
-                      :on-success="handleAvatarSuccess"
-                      :before-upload="beforeAvatarUpload"
-                    >
-                      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                      <el-icon v-else class="avatar-uploader-icon"><VideoCamera /></el-icon>
-                    </el-upload>
+                  <el-form-item label="上传教学视频" label-position="top">
+                    <el-button @click="uploadVideo">上传教学视频</el-button>
+                    <input ref="videoInput" @change="uploadVideoChange" hidden type="file">
+                  </el-form-item>
+                  <el-form-item label="上传课后作业" label-position="top">
+                    <!-- 设置课后作业，支持动态添加 -->
+                    <div>
+                      <div v-for="(item, idx) in form.homework" :key="idx" class="mb-4">
+                        <div class="p-3 border-1 border-slate-200">
+                          <div class="mb-2 flex">
+                            <el-text style="margin-right: 10px;" size="large">选择题型:</el-text>
+                            <el-select v-model="item.questionType" style="max-width: 200px;" placeholder="请选择题型">
+                              <el-option
+                                v-for="cat in questionCatrgories"
+                                :key="cat.value"
+                                :label="cat.label"
+                                :value="cat.value"
+                              />
+                            </el-select>
+                          </div>
+                          <div class="flex">
+                            <el-text style="margin-right: 10px;" size="large">上传题目:</el-text>
+                            <el-input v-model="item.questionContent" style="max-width: 480px;" type="textarea" placeholder="请输入题目..."></el-input>
+                          </div>
+                          <div class="flex">
+                            <el-text style="margin-right: 10px;" size="large">题目答案:</el-text>
+                            <el-input v-model="item.answer"></el-input>
+                          </div>
+                        </div>
+                      </div>
+                      <el-button type="primary" plain icon="el-icon-plus" @click="addHomework">增加题目</el-button>
+                    </div>
                   </el-form-item>
                 </el-form>
-                <!-- 设置课后作业 -->
-                <div>
-                  <!-- 标题 -->
-                  <div class="mb-3 text-xl text-[#606266]">
-                    <el-tag type="primary" size="large">设置课后作业</el-tag>
-                    <el-button round style="margin-left: 10px;" size="small">添加作业</el-button>
-                  </div>
-                  <div>
-                    <div class="p-3 border-1 border-slate-200">
-                      <div class="mb-2 flex">
-                        <el-text style="margin-right: 10px;" size="large">选择题型:</el-text>
-                        <el-select style="max-width: 200px;" placeholder="请选择题型">
-                          <el-option
-                          v-for="item in questionCatrgories"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          />
-                          
-                          <template #footer>
-                            <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
-                              新增选项
-                            </el-button>
-                            <template v-else>
-                              <el-input
-                                v-model="optionName"
-                                class="option-input"
-                                placeholder="输入选项名称"
-                                size="small"
-                              />
-                              <el-button type="primary" size="small" @click="onConfirm">
-                                确定
-                              </el-button>
-                              <el-button size="small" @click="clear">取消</el-button>
-                            </template>
-                          </template>
-                        </el-select>
-                      </div>
-                      <div class="flex">
-                        <el-text style="margin-right: 10px;" size="large">上传题目:</el-text>
-                        <el-input style="max-width: 480px;" type="textarea" placeholder="请输入题目..."></el-input>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+               
               </template>
               <template #footer>
                 <el-button type="danger">取消</el-button>
@@ -203,9 +171,12 @@
 import { ref, onMounted } from 'vue'
 import { Search, Microphone, Collection, Plus, School, VideoCamera } from '@element-plus/icons-vue'
 import { getCourseDetailAPI, postTeacherUploadOnlineCourseAPI, postTeacherGetOnlineCourseListAPI } from '@/api/onlineCourse'
+import { postUploadImgAPI, postUploadVideoAPI } from '@/api/upload'
 
 // 页面加载的同时，获取网络课程列表，默认为口语
 onMounted(async () => {
+  console.log(pageSize.value)
+  
   const res = await postTeacherGetOnlineCourseListAPI({
     courseCategory: activeTab.value,
     pageSize: pageSize.value,
@@ -251,28 +222,34 @@ const isShowDialog = ref(false)
 const optionName = ref('')
 const isAdding = ref(false)
 const questionCatrgories = ref([
-  { label: '单选题', value: '单选题' },
-  { label: '多选题', value: '多选题' },
-  { label: '填空题', value: '填空题' }
+  {label: '单选题', value: 'single'},
+  {label: '多选题', value: 'multiple'},
+  {label: '填空题', value: 'fill_in'},
+  {label: '判断题', value: 'true_or_false'}
 ])
 const form = ref({
   courseTitle: '',
   courseCategory: '',
   introduction: '',
-  coursePlan: ''
-})
-const rules = ref({
-  courseTitle: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-  courseCategory: [{ required: true, message: '请输入课程分类', trigger: 'blur' }],
-  introduction: [{ required: true, message: '请上传课程视频', trigger: 'blur' }],
-  coursePlan: [{ required: true, message: '请上传课程封面', trigger: 'blur' }]
+  coursePlan: '',
+  image: '',
+  video: '',
+  homework: [
+    {
+      questionType: '',
+      questionContent: '',
+      answer: ''
+    }
+  ]
 })
 const uploadCourse = () => {
   isShowDialog.value = true
 }
 const confirmClick = async () => {
-  console.log(111)
-  await ruleFormRef.value.validate()
+  const res = await postTeacherUploadOnlineCourseAPI(form.value)
+  console.log(res)
+  console.log(form.value)
+  
 }
 const onConfirm = () => {
   if (optionName.value) {
@@ -291,6 +268,52 @@ const onAddOption = () => {
   isAdding.value = true
 }
 
+
+const videoInput = ref(null)
+const imgInput = ref(null)
+const uploadImg = () => {
+  imgInput.value.click()
+}
+const uploadVideo = () => {
+  videoInput.value.click()
+}
+const uploadImgChange = async (e) => {
+  console.log(e)
+  const fd = new FormData()
+  fd.append('files', e.target.files[0])
+
+  const res = await postUploadImgAPI(fd)
+  console.log(res)
+  form.value.image = res.data.url[0]
+  console.log(form.value.image)
+  
+}
+const uploadVideoChange = async (e) => {
+  console.log(e)
+  const fd = new FormData()
+  fd.append('files', e.target.files[0])
+
+  const res = await postUploadVideoAPI(fd)
+  console.log(res)
+  form.value.video = res.data.url[0]
+}
+
+// 新增作业题目
+const addHomework = () => {
+  form.value.homework.push({
+    questionType: '',
+    questionContent: '',
+    answer: ''
+  })
+}
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const goPage = () => {
+  router.push('/onlineCourseDetail')
+  console.log(111)
+  
+}
 </script>
 
 <style lang="less" scope>

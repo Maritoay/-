@@ -10,7 +10,7 @@ const route = useRoute()
 function getActiveIndex(path) {
   if (path === '/home') {
     activeIndex.value = 0
-  } else if (path === '/teacher/teachingDocking') {
+  } else if (path === '/dock') {
     activeIndex.value = 1
   } else if (
     path === '/onlineCourse' ||
@@ -94,7 +94,7 @@ const SearchValue = ref('')
           首页
         </div>
         <div
-          @click="pageJump('/teacher/teachingDocking', 1)"
+          @click="pageJump('/dock', 1)"
           class="mr-5 px-5 py-3 text-xl 2xl:text-2xl duration-500 rounded-3xl cursor-pointer hover:ring-2 ring-blue-500/50"
           :class="{ 'bg-sky-200': activeIndex === 1 }"
         >

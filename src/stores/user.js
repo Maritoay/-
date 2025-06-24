@@ -2,26 +2,29 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('user', () => {
-  // 存储userInfo
+  // 定义状态
   const userInfo = ref('')
-  // 存储token
+  const token = ref('')
+  
+  // 定义方法
   const setUserInfo = (info) => {
     userInfo.value = info
   }
-  // 获取userInfo
-  const getUserInfo = () => {
-    return userInfo.value
-  }
-  // 删除userInfo
+  const getUserInfo = () => userInfo.value
   const removeUserInfo = () => {
     userInfo.value = ''
+    token.value = ''
   }
+  
+  // 返回状态和方法
   return {
     userInfo,
+    token,
     setUserInfo,
     getUserInfo,
     removeUserInfo
   }
 }, {
-  persist: true // 开启持久化存储
+  // 持久化配置（必须作为第三个参数）
+  persist: true
 })
